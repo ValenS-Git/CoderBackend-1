@@ -45,6 +45,12 @@ export class CartsManager{
             throw new Error('Carrito no encontrado');
         }
 
+        const products = await this.readProducts();
+        const product = products.find(p => p.id === parseInt(pid))
+
+        if(!product) {
+            throw new Error('Producto no encontrado')
+        }
         const productIndex = cart.products.findIndex(p => p.product === parseInt(pid));
         if(productIndex !== -1){
             cart.products[productIndex].quantity += quantity;
