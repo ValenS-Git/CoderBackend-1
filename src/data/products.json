@@ -1,35 +1,45 @@
 [
-    {
-        "id": 1,
-        "title": "Crash Bandicoot N'sane trilogy",
-        "description": "Videojuego en el que encarnas a un marsupial, que tiene que derrotar al villano Neo Cortex.",
-        "code": "ABC123",
-        "price": 20,
-        "status": true,
-        "stock": 50,
-        "category": "plataforma",
-        "thumbnails": "https://image.api.playstation.com/cdn/UP0002/CUSA07402_00/03ZtrPdjasIxzi8QrzOb2zCIHLMydFbh.png"
-    },
-    {
-        "id": 2,
-        "title": "FIFA 2024",
-        "description": "Videojuego basado en el mundo del football",
-        "code": "XYZ456",
-        "price": 55,
-        "status": true,
-        "stock": 30,
-        "category": "deporte",
-        "thumbnails": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0817/4248a0d1a669210e5caf5174eda176c7883be2c9089fa106.png"
-    },
-    {
-        "id": 3,
-        "title": "Mario Bros Oddysey",
-        "description": "Videojuego sobre un plomero que tiene que rescatar a la princesa Peach",
-        "code": "MKT789",
-        "price": 40,
-        "status": true,
-        "stock": 20,
-        "category": "plataforma",
-        "thumbnails": "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5"
-    }
+  {
+    "id": 1,
+    "title": "Crash Bandicoot N'sane trilogy",
+    "description": "Videojuego en el que encarnas a un marsupial, que tiene que derrotar al villano Neo Cortex.",
+    "code": "ABC123",
+    "price": 20,
+    "status": true,
+    "stock": 50,
+    "category": "plataforma",
+    "thumbnails": "https://image.api.playstation.com/cdn/UP0002/CUSA07402_00/03ZtrPdjasIxzi8QrzOb2zCIHLMydFbh.png"
+  },
+  {
+    "id": 2,
+    "title": "FIFA 2024",
+    "description": "Videojuego basado en el mundo del football",
+    "code": "XYZ456",
+    "price": 55,
+    "status": true,
+    "stock": 30,
+    "category": "deporte",
+    "thumbnails": "https://image.api.playstation.com/vulcan/ap/rnd/202408/0817/4248a0d1a669210e5caf5174eda176c7883be2c9089fa106.png"
+  },
+  {
+    "id": 3,
+    "title": "Mario Bros Oddysey",
+    "description": "Videojuego sobre un plomero que tiene que rescatar a la princesa Peach",
+    "code": "MKT789",
+    "price": 40,
+    "status": true,
+    "stock": 20,
+    "category": "plataforma",
+    "thumbnails": "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5"
+  },
+  {
+    "id": 4,
+    "title": "Stellar Blade",
+    "description": "Es una historia de acción y aventura que transcurre en un mundo posapocalíptico de ciencia ficción y que ofrece un combate repleto de acción y elementos de los juegos de rol.",
+    "code": "1221a1",
+    "price": 59,
+    "stock": 20,
+    "category": "Accion",
+    "thumbnails": "https://image.api.playstation.com/vulcan/ap/rnd/202401/2211/40e7cfd126a11fe5118310ebce6d9b3a23e7cabaca717217.png"
+  }
 ]

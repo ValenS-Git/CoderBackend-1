@@ -1,0 +1,145 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #181A20;
+}
+
+h2 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+}
+
+.main-title {
+    margin: 30px;
+}
+
+#productList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.card {
+    background-color: #22242e;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px 0px rgb(229, 141, 39);
+}
+
+.card img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-body h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 0;
+    color: #e58d27;
+    width: 80%;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.card-body p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #fff;
+}
+
+.card-body .price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    font-style: italic;
+    padding-left: 10px;
+    width: 20%;
+}
+
+/* Formulario */
+.form-container {
+    width: 40%;
+    padding: 20px;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+form label {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #2c2f3f;
+    color: #fffb;
+}
+
+form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background-color: #e58d27;
+    color: #181A20;
+    border: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form button:hover {
+    background-color: #d57f21;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 70px;
+    padding: 20px;
+}
+
+.container h2{
+    font-size: 1.5rem;
+    color: #e58d27;
+    text-align: center;
+    padding: 30px;
+}
+.product-list {
+    width: 60%;
+}
+

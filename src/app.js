@@ -10,7 +10,7 @@ const PORT = 8080;
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set('views','./src/view')
+app.set('views','./src/views')
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
