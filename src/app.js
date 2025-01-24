@@ -48,9 +48,9 @@ io.on('connection', async (socket) => {
             const productIndex = products.findIndex(prod => prod.code === code);
 
             if (productIndex !== -1) {
-                products.splice(productIndex, 1); // Eliminar el producto
-                await ProductsManager.writeProducts(products); // Guardar cambios
-                io.emit('products', products);  // Enviar lista actualizada a todos los clientes
+                products.splice(productIndex, 1); 
+                await ProductsManager.writeProducts(products); 
+                io.emit('products', products);  
             } else {
                 console.log('Producto no encontrado');
             }

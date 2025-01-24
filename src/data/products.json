@@ -23,13 +23,12 @@
   },
   {
     "id": 3,
-    "title": "Mario Bros Oddysey",
-    "description": "Videojuego sobre un plomero que tiene que rescatar a la princesa Peach",
-    "code": "MKT789",
-    "price": 40,
-    "status": true,
-    "stock": 20,
-    "category": "plataforma",
-    "thumbnails": "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000001130/c42553b4fd0312c31e70ec7468c6c9bccd739f340152925b9600631f2d29f8b5"
+    "title": "Horizon Forbbiden West",
+    "description": "Únete a Aloy mientras desafía el Oeste Prohibido, una frontera majestuosa, aunque peligrosa, en la que se ocultan nuevas y misteriosas amenazas.",
+    "code": "HFW2023",
+    "price": 60,
+    "stock": 10,
+    "category": "Mundo abierto",
+    "thumbnails": "https://image.api.playstation.com/vulcan/ap/rnd/202107/3100/1dy5w3SNiJnXjP8YvmydCL9X.png"
   }
 ]

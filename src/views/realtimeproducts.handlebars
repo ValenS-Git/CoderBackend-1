@@ -54,6 +54,7 @@
                         <p class="price">$ {{price}}</p>
                     </div>
                     <p>{{description}}</p>
+                    <button class="delete-btn">Eliminar</button>
                 </div>
             </div>
             {{/each}}
@@ -80,8 +81,17 @@
                 <p class="price">$ ${product.price}</p>
             </div>
             <p>${product.description}</p>
+            <button class="delete-btn" data-code="${product.code}">Eliminar</button>            
         </div>`;
             productList.appendChild(div);
+        });
+
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const productCode = button.getAttribute('data-code');
+                socket.emit('deleteProduct', productCode);
+            });
         });
     });
 
