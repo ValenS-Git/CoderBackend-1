@@ -2,31 +2,43 @@
 
 <div class="container">
     <div class="form-container">
-        <h2>Control de productos</h2>
-        <form id="addProductForm">
-            <label for="title">Título</label>
-            <input type="text" id="title" required>
+        <div class="addProduct-form-container">
+            <h2>Control de productos</h2>
+            <form id="addProductForm">
+                <label for="title">Título</label>
+                <input type="text" id="title" required>
 
-            <label for="description">Descripción</label>
-            <input type="text" id="description" required>
+                <label for="description">Descripción</label>
+                <input type="text" id="description" required>
 
-            <label for="code">Código</label>
-            <input type="text" id="code" required>
+                <label for="code">Código</label>
+                <input type="text" id="code" required>
 
-            <label for="price">Precio</label>
-            <input type="number" id="price" required>
+                <label for="price">Precio</label>
+                <input type="number" id="price" required>
 
-            <label for="stock">Stock</label>
-            <input type="number" id="stock" required>
+                <label for="stock">Stock</label>
+                <input type="number" id="stock" required>
 
-            <label for="category">Categoría</label>
-            <input type="text" id="category" required>
+                <label for="category">Categoría</label>
+                <input type="text" id="category" required>
 
-            <label for="thumbnails">URL Imagen</label>
-            <input type="text" id="thumbnails" required>
+                <label for="thumbnails">URL Imagen</label>
+                <input type="text" id="thumbnails" required>
 
-            <button type="submit">Agregar Producto</button>
-        </form>
+                <button type="submit">Agregar Producto</button>
+            </form>
+        </div>
+
+        <div class="delete-form-container">
+            <h2>Eliminar Producto</h2>
+            <form id="deleteProductForm">
+                <label for="codeToDelete">Código del Producto</label>
+                <input type="text" id="codeToDelete" required placeholder="Ingrese el código del producto">
+
+                <button type="submit">Eliminar Producto</button>
+            </form>
+        </div>
     </div>
 
     <!-- Productos -->
@@ -55,7 +67,7 @@
 
     socket.on('products', (products) => {
         const productList = document.getElementById('productList');
-        productList.innerHTML = ''; // Limpiar la lista de productos
+        productList.innerHTML = '';
 
         products.forEach(product => {
             const div = document.createElement('div');
@@ -89,6 +101,16 @@
 
         socket.emit('createProduct', newProduct);
 
-        productForm.reset(); // Limpiar el formulario después de agregar el producto
+        productForm.reset();
+    });
+
+    const deleteProductForm = document.getElementById('deleteProductForm');
+    deleteProductForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const productCodeToDelete = document.getElementById('codeToDelete').value;
+
+        socket.emit('deleteProduct', productCodeToDelete);
+
+        deleteProductForm.reset();
     });
 </script>

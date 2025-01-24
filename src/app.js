@@ -2,6 +2,7 @@ import express, { json, urlencoded } from 'express';
 import { router as productsRouter } from './routes/productsRoutes.js';
 import { router as cartsRouter } from './routes/cartsRoutes.js';
 import { engine } from 'express-handlebars';
+import { viewsRouter } from './routes/views.routes.js';
 import { Server } from 'socket.io';
 import { ProductsManager } from './dao/ProductsManager.js';
 
@@ -10,21 +11,14 @@ const PORT = 8080;
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set('views','./src/views')
+app.set('views', './src/views')
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(express.static("./src/public"))
 
-app.get('/', async (req, res) => {
-    const products = await ProductsManager.getProducts()
-    res.render('home', { products })
-});
+app.use('/', viewsRouter);
 
-app.get('/realtimeproducts', async (req, res) => {
-    const products = await ProductsManager.getProducts();
-    res.render('realTimeProducts', { products });
-});
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
@@ -46,6 +40,23 @@ io.on('connection', async (socket) => {
         } catch (error) {
             console.error('Error al crear el producto ', error)
         }
-    })
+    });
+
+    socket.on('deleteProduct', async (code) => {
+        try {
+            const products = await ProductsManager.readProducts();
+            const productIndex = products.findIndex(prod => prod.code === code);
+
+            if (productIndex !== -1) {
+                products.splice(productIndex, 1); // Eliminar el producto
+                await ProductsManager.writeProducts(products); // Guardar cambios
+                io.emit('products', products);  // Enviar lista actualizada a todos los clientes
+            } else {
+                console.log('Producto no encontrado');
+            }
+        } catch (error) {
+            console.error('Error al eliminar el producto', error);
+        }
+    });
 })
 
