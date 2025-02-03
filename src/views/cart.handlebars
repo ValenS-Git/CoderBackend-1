@@ -1,0 +1,36 @@
+{{#extends "main"}}
+
+{{#block "body"}}
+    <h2>Detalles del Carrito</h2>
+
+    <div class="cart-container">
+        {{#each cart.products}}
+            <div class="cart-item">
+                <img src="{{this.product.image}}" alt="{{this.product.name}}" />
+                <div class="cart-item-info">
+                    <h3>{{this.product.name}}</h3>
+                    <p>Cantidad: {{this.quantity}}</p>
+                    <p>Precio: ${{this.product.price}}</p>
+                    <p>Total: ${{this.product.price * this.quantity}}</p>
+                </div>
+                <form action="/carts/{{cartId}}/products/{{this.product._id}}" method="POST">
+                    <input type="number" name="quantity" min="1" value="{{this.quantity}}" />
+                    <button type="submit" class="btn-update-quantity">Actualizar cantidad</button>
+                </form>
+                <form action="/carts/{{cartId}}/products/{{this.product._id}}" method="POST">
+                    <button type="submit" class="btn-remove-from-cart">Eliminar</button>
+                </form>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="cart-total">
+        <p><strong>Total: ${{totalPrice}}</strong></p>
+    </div>
+
+    <form action="/carts/{{cartId}}" method="POST">
+        <button type="submit" class="btn-clear-cart">Vaciar carrito</button>
+    </form>
+    
+    <a href="/products" class="btn-back-to-products">Volver a los productos</a>
+{{/block}}

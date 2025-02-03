@@ -1,126 +1,30 @@
-<h2 class="main-title">Productos en Tiempo Real</h2>
-
-<div class="container">
-    <div class="form-container">
-        <div class="addProduct-form-container">
-            <h2>Control de productos</h2>
-            <form id="addProductForm">
-                <label for="title">Título</label>
-                <input type="text" id="title" required>
-
-                <label for="description">Descripción</label>
-                <input type="text" id="description" required>
-
-                <label for="code">Código</label>
-                <input type="text" id="code" required>
-
-                <label for="price">Precio</label>
-                <input type="number" id="price" required>
-
-                <label for="stock">Stock</label>
-                <input type="number" id="stock" required>
-
-                <label for="category">Categoría</label>
-                <input type="text" id="category" required>
-
-                <label for="thumbnails">URL Imagen</label>
-                <input type="text" id="thumbnails" required>
-
-                <button type="submit">Agregar Producto</button>
-            </form>
+<h2>Productos Disponibles</h2>
+<div class="product-list">
+    {{#each products}}
+        <div class="product">
+            <h3>{{this.name}}</h3>
+            <p>Precio: ${{this.price}}</p>
+            <p>Categoría: {{this.category}}</p>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
         </div>
-
-        <div class="delete-form-container">
-            <h2>Eliminar Producto</h2>
-            <form id="deleteProductForm">
-                <label for="codeToDelete">Código del Producto</label>
-                <input type="text" id="codeToDelete" required placeholder="Ingrese el código del producto">
-
-                <button type="submit">Eliminar Producto</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Productos -->
-    <div class="product-list">
-        <h2>Productos Disponibles</h2>
-        <div id="productList" class="products-form">
-            {{#each products}}
-            <div class="card">
-                <img src="{{thumbnails}}" alt="{{title}}">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h3>{{title}}</h3>
-                        <p class="price">$ {{price}}</p>
-                    </div>
-                    <p>{{description}}</p>
-                    <button class="delete-btn">Eliminar</button>
-                </div>
-            </div>
-            {{/each}}
-        </div>
-    </div>
+    {{/each}}
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
+<div class="pagination">
+    {{#if hasPrevPage}}
+        <a href="{{prevLink}}">Página Anterior</a>
+    {{/if}}
+    {{#if hasNextPage}}
+        <a href="{{nextLink}}">Página Siguiente</a>
+    {{/if}}
+</div>
+
 <script>
-    const socket = io();
-
-    socket.on('products', (products) => {
-        const productList = document.getElementById('productList');
-        productList.innerHTML = '';
-
-        products.forEach(product => {
-            const div = document.createElement('div');
-            div.classList.add('card');
-            div.innerHTML = `
-        <img src="${product.thumbnails}" alt="${product.title}">
-        <div class="card-body">
-            <div class="card-title">
-                <h3>${product.title}</h3>
-                <p class="price">$ ${product.price}</p>
-            </div>
-            <p>${product.description}</p>
-            <button class="delete-btn" data-code="${product.code}">Eliminar</button>            
-        </div>`;
-            productList.appendChild(div);
-        });
-
-        const deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const productCode = button.getAttribute('data-code');
-                socket.emit('deleteProduct', productCode);
-            });
-        });
-    });
-
-    const productForm = document.getElementById('addProductForm');
-    productForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const newProduct = {
-            title: document.getElementById('title').value,
-            description: document.getElementById('description').value,
-            code: document.getElementById('code').value,
-            price: parseFloat(document.getElementById('price').value),
-            stock: parseInt(document.getElementById('stock').value),
-            category: document.getElementById('category').value,
-            thumbnails: document.getElementById('thumbnails').value
-        };
-
-        socket.emit('createProduct', newProduct);
-
-        productForm.reset();
-    });
-
-    const deleteProductForm = document.getElementById('deleteProductForm');
-    deleteProductForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const productCodeToDelete = document.getElementById('codeToDelete').value;
-
-        socket.emit('deleteProduct', productCodeToDelete);
-
-        deleteProductForm.reset();
-    });
+    function addToCart(productId) {
+        fetch(`/carts/1/products/${productId}`, { method: 'PUT' }) 
+            .then(response => response.json())
+            .then(data => alert('Producto agregado al carrito'))
+            .catch(error => console.error('Error:', error));
+    }
 </script>
+

@@ -1,62 +1,44 @@
-import express, { json, urlencoded } from 'express';
-import { router as productsRouter } from './routes/productsRoutes.js';
-import { router as cartsRouter } from './routes/cartsRoutes.js';
-import { engine } from 'express-handlebars';
-import { viewsRouter } from './routes/views.routes.js';
+import express from 'express';
+import { engine } from 'express-handlebars';  
+import productsRoutes from './routes/productsRoutes.js';
+import cartsRoutes from './routes/cartsRoutes.js';
+import viewsRoutes from './routes/views.routes.js';
+import mongoose from 'mongoose';
 import { Server } from 'socket.io';
-import { ProductsManager } from './dao/ProductsManager.js';
 
 const app = express();
-const PORT = 8080;
 
-app.engine('handlebars', engine());
+mongoose.connect('mongodb://localhost:27017/shop')
+  .then(() => console.log('Base de datos conectada'))
+  .catch(err => console.log('Error en la conexión a la base de datos', err));
+
+app.engine('handlebars', engine());  
 app.set('view engine', 'handlebars');
-app.set('views', './src/views')
 
-app.use(json());
-app.use(urlencoded({ extended: true }));
-app.use(express.static("./src/public"))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/', viewsRouter);
+app.use('/api/products', productsRoutes);
+app.use('/api/carts', cartsRoutes);
+app.use('/views', viewsRoutes);
 
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
+app.use(express.static('public'));
 
-const serverHTTP = app.listen(PORT, () => {
-    console.log(`servidor corriendo en localhost:${PORT}`)
+const server = app.listen(8080, () => {
+  console.log('Servidor corriendo en http://localhost:8080');
 });
-const io = new Server(serverHTTP)
 
-io.on('connection', async (socket) => {
-    console.log('Nuevo cliente conectado');
+const io = new Server(server);
 
-    socket.emit('products', await ProductsManager.getProducts());
-
-    socket.on('createProduct', async (productData) => {
-        try {
-            const createdProduct = await ProductsManager.createProduct(productData);
-            const products = await ProductsManager.getProducts();
-            io.emit('products', products)
-        } catch (error) {
-            console.error('Error al crear el producto ', error)
-        }
-    });
-
-    socket.on('deleteProduct', async (code) => {
-        try {
-            const products = await ProductsManager.readProducts();
-            const productIndex = products.findIndex(prod => prod.code === code);
-
-            if (productIndex !== -1) {
-                products.splice(productIndex, 1); 
-                await ProductsManager.writeProducts(products); 
-                io.emit('products', products);  
-            } else {
-                console.log('Producto no encontrado');
-            }
-        } catch (error) {
-            console.error('Error al eliminar el producto', error);
-        }
-    });
-})
+io.on('connection', (socket) => {
+  console.log('Un nuevo cliente se ha conectado');
+  
+  socket.on('productAdded', (product) => {
+    io.emit('productAdded', product);  
+  });
+  
+  socket.on('cartUpdated', (cart) => {
+    io.emit('cartUpdated', cart);  
+  });
+});
 

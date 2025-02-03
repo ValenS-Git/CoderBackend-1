@@ -1,90 +1,52 @@
-import fs from 'fs/promises';
+import Product from './models/Product.js'; 
 
-export class ProductsManager {
-    static #path = "";
+class ProductsManager {
+  constructor() {}
 
-    static setPath(rutaArchivo = "") {
-        this.#path = rutaArchivo;
+  async getAllProducts({ limit = 10, page = 1, query = {}, sort = '' }) {
+    try {
+      const filter = query.category ? { category: query.category } : query; 
+      const sortOptions = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {}; 
+
+      const options = {
+        page,
+        limit,
+        sort: sortOptions
+      };
+
+      const result = await Product.paginate(filter, options);
+
+      return {
+        status: 'success',
+        payload: result.docs,
+        totalPages: result.totalPages,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage,
+        page: result.page,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevLink: result.prevPage ? `/api/products?page=${result.prevPage}` : null,
+        nextLink: result.nextPage ? `/api/products?page=${result.nextPage}` : null
+      };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
+  }
 
-    static async readProducts() {
-        if (!this.#path) {
-            throw new Error("La ruta del archvio no esta configurada")
-        }
-        try {
-            return JSON.parse(await fs.readFile(this.#path, { encoding: "utf-8" }));
-        } catch (error) {
-            console.error("Error al leer los productos: ", error);
-            return [];
-        }
+  async getProductById(pid) {
+    try {
+      const product = await Product.findById(pid);
+      if (!product) {
+        return { status: 'error', message: 'Product not found' };
+      }
+      return { status: 'success', payload: product };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
-
-    static async writeProducts(products) {
-        if (!this.#path) {
-            throw new Error("La ruta del archvio no esta configurada");
-        }
-        try {
-            await fs.writeFile(this.#path, JSON.stringify(products, null, 2));
-        } catch (error) {
-            console.error("Error al escribir productos: ", error);
-        }
-    };
-
-    static async getProducts(limit) {
-        const products = await ProductsManager.readProducts();
-        if (limit) {
-            return products.slice(0, limit);
-        }
-        return products;
-    };
-
-    static async getProductById(pid) {
-        const products = await ProductsManager.readProducts();
-        return products.find(prod => prod.id === pid);
-    };
-
-    static async createProduct(productData) {
-        let products = await ProductsManager.readProducts();
-
-        const existProduct = products.find(prod => prod.code === productData.code)
-        if (existProduct) {
-            throw new Error('Ya existe un producto con el mismo codigo')
-        }
-        let id = 1;
-        if (products.length > 0) {
-            id = Math.max(...products.map(d => d.id)) + 1
-        };
-        let newProduct = {
-            id,
-            ...productData
-        };
-        products.push(newProduct);
-        await ProductsManager.writeProducts(products);
-        return newProduct;
-    };
-
-    static async updateProduct(pid, updateData) {
-        const products = await ProductsManager.readProducts();
-        const productIndex = products.findIndex(prod => prod.id === pid);
-        if (productIndex !== -1) {
-            const updatedProduct = {
-                ...products[productIndex],
-                ...updateData
-            };
-            products[productIndex] = updatedProduct;
-            await ProductsManager.writeProducts(products);
-            return updatedProduct;
-        } else {
-            throw new Error('Producto no encontrado');
-        }
-    }
-    static async deleteProduct(pid) {
-        let products = await ProductsManager.readProducts();
-        const productIndex = products.findIndex(prod => prod.id === pid);
-        if (productIndex !== -1) {
-            products = products.filter(prod => prod.id !== pid);
-            await ProductsManager.writeProducts(products);
-            return true;
-        }
-    }
+  }
 }
+
+export default ProductsManager;
+

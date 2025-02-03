@@ -1,63 +1,66 @@
-import fs from 'fs/promises';
+// dao/CartsManager.js
+import Cart from './models/Cart.js';
 
-export class CartsManager{
-    static #path = "";
+class CartsManager {
+  constructor() {}
 
-    static setPath(rutaArchivo = ""){
-        this.#path = rutaArchivo;
+  async getCartById(cid) {
+    try {
+      const cart = await Cart.findById(cid).populate('products.product');
+      if (!cart) {
+        return { status: 'error', message: 'Cart not found' };
+      }
+      return { status: 'success', payload: cart };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
+  }
 
-    static async readCarts(){
-        try {
-            return JSON.parse(await fs.readFile(this.#path, {encoding: 'utf-8'}));
-        }catch (error){
-            console.error('Error al leer el carrito: '. error);
-            return [];
-        }
+  async updateCart(cid, products) {
+    try {
+      const cart = await Cart.findByIdAndUpdate(cid, { products }, { new: true });
+      return { status: 'success', payload: cart };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
-    static async writeCarts(carts){
-        try{
-            await fs.writeFile(this.#path, JSON.stringify(carts, null, 2));
-        }catch(error){
-            console.error('Error al conseguir carrito: ', error);
-        }
-    }
-    static async createCart(){
-        const carts = await this.readCarts();
-        const newCart = {
-            id: carts.length > 0 ? Math.max(...carts.map(cart => cart.id))+1 : 1,
-            products: []
-        }
-        carts.push(newCart);
-        await this.writeCarts(carts);
-        return newCart;
-    }
+  }
 
-    static async getCartById(cid){
-        const carts = await this.readCarts();
-        return carts.find(cart => cart.id === parseInt(cid));
+  async deleteProductFromCart(cid, pid) {
+    try {
+      const cart = await Cart.findById(cid);
+      if (!cart) {
+        return { status: 'error', message: 'Cart not found' };
+      }
+
+      cart.products = cart.products.filter(product => product.product.toString() !== pid); 
+      await cart.save();
+
+      return { status: 'success', payload: cart };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
+  }
 
-    static async addProductToCart(cid, pid, quantity){
-        const carts = await this.readCarts();
-        const cart = carts.find(cart => cart.id === parseInt(cid));
-        if(!cart){
-            throw new Error('Carrito no encontrado');
-        }
+  async deleteAllProductsFromCart(cid) {
+    try {
+      const cart = await Cart.findById(cid);
+      if (!cart) {
+        return { status: 'error', message: 'Cart not found' };
+      }
 
-        const products = await this.readProducts();
-        const product = products.find(p => p.id === parseInt(pid))
+      cart.products = []; 
+      await cart.save();
 
-        if(!product) {
-            throw new Error('Producto no encontrado')
-        }
-        const productIndex = cart.products.findIndex(p => p.product === parseInt(pid));
-        if(productIndex !== -1){
-            cart.products[productIndex].quantity += quantity;
-        }else{
-            cart.products.push({product: parseInt(pid), quantity});
-        }
-        await this.writeCarts(carts);
-        return cart.products;
+      return { status: 'success', payload: cart };
+    } catch (error) {
+      console.error(error);
+      return { status: 'error', message: error.message };
     }
+  }
 }
+
+export default CartsManager;
+
