@@ -1,12 +1,12 @@
-import Product from './models/Product.js'; 
+import Product from './models/Product.js';
 
 class ProductsManager {
   constructor() {}
 
-  async getAllProducts({ limit = 10, page = 1, query = {}, sort = '' }) {
+  async getAll({ limit = 10, page = 1, query = {}, sort = '' }) {
     try {
-      const filter = query.category ? { category: query.category } : query; 
-      const sortOptions = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {}; 
+      const filter = query.category ? { category: query.category } : query;
+      const sortOptions = sort === 'asc' ? { price: 1 } : sort === 'desc' ? { price: -1 } : {};
 
       const options = {
         page,
@@ -49,4 +49,5 @@ class ProductsManager {
 }
 
 export default ProductsManager;
+
 

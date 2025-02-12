@@ -5,10 +5,12 @@ import cartsRoutes from './routes/cartsRoutes.js';
 import viewsRoutes from './routes/views.routes.js';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
+import dotenv from 'dotenv';
 
 const app = express();
+dotenv.config()
 
-mongoose.connect('mongodb://localhost:27017/shop')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Base de datos conectada'))
   .catch(err => console.log('Error en la conexión a la base de datos', err));
 
